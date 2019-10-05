@@ -186,7 +186,7 @@ def make_env(scenario_name, arglist, benchmark=False):
     import importlib
     from mpe_local.multiagent.environment import MultiAgentEnv
 
-    module_name = "maddpg_o.scenarios.{}".format(scenario_name)
+    module_name = "mpe_local.multiagent.scenarios.{}".format(scenario_name)
     scenario_class = importlib.import_module(module_name).Scenario
     # load scenario from script
     # print(Scenario.__module__.__file__)
@@ -311,10 +311,10 @@ def parse_args(add_extra_flags=None):
         "Reinforcement Learning experiments for multiagent environments")
     # Environment
     parser.add_argument("--scenario", type=str,
-                        default="simple_sheep_wolf_bettershape_changefood_sharereward_partialv2",
+                        default="grassland",
                         help="name of the scenario script")
     parser.add_argument("--map-size", type=str, default="normal")
-    parser.add_argument("--sight", type=float, default=0.5)
+    parser.add_argument("--sight", type=float, default=100)
     parser.add_argument("--no-wheel", action="store_true", default=False)
     parser.add_argument("--alpha", type=float, default=0.0)
     parser.add_argument("--show-attention", action="store_true", default=False)
