@@ -6,17 +6,17 @@ Used in the paper [Evolutionary Population Curriculum for Scaling Multi-Agent Re
 
 ## Code structure
 
-- `./mpe_local/multiagent/environment.py`: contains code for environment simulation (interaction physics, `_step()` function, etc.)
+- `./multiagent/environment.py`: contains code for environment simulation (interaction physics, `_step()` function, etc.)
 
-- `./mpe_local/multiagent/core.py`: contains classes for various objects (Entities, Landmarks, Agents, etc.) that are used throughout the code.
+- `./multiagent/core.py`: contains classes for various objects (Entities, Landmarks, Agents, etc.) that are used throughout the code.
 
-- `./mpe_local/multiagent/rendering.py`: used for displaying agent behaviors on the screen.
+- `./multiagent/rendering.py`: used for displaying agent behaviors on the screen.
 
-- `./mpe_local/multiagent/policy.py`: contains code for interactive policy based on keyboard input.
+- `./multiagent/policy.py`: contains code for interactive policy based on keyboard input.
 
-- `./mpe_local/multiagent/scenario.py`: contains base scenario object that is extended for all scenarios.
+- `./multiagent/scenario.py`: contains base scenario object that is extended for all scenarios.
 
-- `./mpe_local/multiagent/scenarios/`: folder where various scenarios/ environments are stored. scenario code consists of several functions:
+- `./multiagent/scenarios/`: folder where various scenarios/ environments are stored. scenario code consists of several functions:
     1) `make_world()`: creates all of the entities that inhabit the world (landmarks, agents, etc.), assigns their capabilities (whether they can communicate, or move, or both).
      called once at the beginning of each training session
     2) `reset_world()`: resets the world by assigning properties (position, color, etc.) to all entities in the world
@@ -32,14 +32,8 @@ You can create new scenarios by implementing the first 4 functions above (`make_
 ## List of environments
 
 
-| Env name in code (name in paper) |  Communication? | Competitive? | Notes |
+| Env name in code (name in paper) | Competitive or Cooperative | Notes |
 | --- | --- | --- | --- |
-| `simple.py` | N | N | Single agent sees landmark position, rewarded based on how close it gets to landmark. Not a multiagent environment -- used for debugging policies. |
-| `simple_adversary.py` (Physical deception) | N | Y | 1 adversary (red), N good agents (green), N landmarks (usually N=2). All agents observe position of landmarks and other agents. One landmark is the ‘target landmark’ (colored green). Good agents rewarded based on how close one of them is to the target landmark, but negatively rewarded if the adversary is close to target landmark. Adversary is rewarded based on how close it is to the target, but it doesn’t know which landmark is the target landmark. So good agents have to learn to ‘split up’ and cover all landmarks to deceive the adversary. |
-| `simple_crypto.py` (Covert communication) | Y | Y | Two good agents (alice and bob), one adversary (eve). Alice must sent a private message to bob over a public channel. Alice and bob are rewarded based on how well bob reconstructs the message, but negatively rewarded if eve can reconstruct the message. Alice and bob have a private key (randomly generated at beginning of each episode), which they must learn to use to encrypt the message. |
-| `simple_push.py` (Keep-away) | N |Y  | 1 agent, 1 adversary, 1 landmark. Agent is rewarded based on distance to landmark. Adversary is rewarded if it is close to the landmark, and if the agent is far from the landmark. So the adversary learns to push agent away from the landmark. |
-| `simple_reference.py` | Y | N | 2 agents, 3 landmarks of different colors. Each agent wants to get to their target landmark, which is known only by other agent. Reward is collective. So agents have to learn to communicate the goal of the other agent, and navigate to their landmark. This is the same as the simple_speaker_listener scenario where both agents are simultaneous speakers and listeners. |
-| `simple_speaker_listener.py` (Cooperative communication) | Y | N | Same as simple_reference, except one agent is the ‘speaker’ (gray) that does not move (observes goal of other agent), and other agent is the listener (cannot speak, but must navigate to correct landmark).|
-| `simple_spread.py` (Cooperative navigation) | N | N | N agents, N landmarks. Agents are rewarded based on how far any agent is from each landmark. Agents are penalized if they collide with other agents. So, agents have to learn to cover all the landmarks while avoiding collisions. |
-| `simple_tag.py` (Predator-prey) | N | Y | Predator-prey environment. Good agents (green) are faster and want to avoid being hit by adversaries (red). Adversaries are slower and want to hit good agents. Obstacles (large black circles) block the way. |
-| `simple_world_comm.py` | Y | Y | Environment seen in the video accompanying the paper. Same as simple_tag, except (1) there is food (small blue balls) that the good agents are rewarded for being near, (2) we now have ‘forests’ that hide agents inside from being seen from outside; (3) there is a ‘leader adversary” that can see the agents at all times, and can communicate with the other adversaries to help coordinate the chase. |
+| `grassland.py` | Fully Competitive | The Grassland Game. Sheep (blue) are two times as fast as wolves (red). We also have a fixed amount of L grass pellets (food for sheep) as green landmarks. A wolf will be rewarded when it collides with (eats) a sheep, and the (eaten) sheep will obtain a negative reward and becomes inactive (dead). A sheep will be rewarded when it comes across a grass pellet and the grass will be collected and respawned in another random position. Note that in this survival game, each individual agent has its own reward and does not share rewards with others. |
+| `adversarial.py` | Partial Cooperative Partial Competitive | The Adversarial Battle Game. two teams of agents (i.e., Ω = 2 for each team) competing for the resources. Both teams have the same number of agents (N1 = N2). When an agent collects a unit of resource, the resource will be respawned and all the agents in its team will receive a positive reward. Furthermore, if there are more than two agents from team 1 collide with one agent from team 2, the whole team 1 will be rewarded while the trapped agent from team 2 will be deactivated (dead) and the whole team 2 will be penalized, and vice versa. |
+| `food_collect.py` | Fully Cooperative| The Food Collection Game. N fully cooperated agents and N food locations. The agents need to collaboratively occupy as many food locations as possible within the game horizon. Whenever a food is occupied by any agent, the whole team will get a reward of 6/N in that timestep for that food. The more food occupied, the more rewards the team will collect. |
