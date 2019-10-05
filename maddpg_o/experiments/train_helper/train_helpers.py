@@ -222,17 +222,17 @@ def get_trainer(side, i, scope, env, obs_shape_n):
     trainer = MADDPGAgentMicroSharedTrainer
     policy = FLAGS.adv_policy if side == "adv" else FLAGS.good_policy
     share_weights = FLAGS.adv_share_weights if side == "adv" else FLAGS.good_share_weights
-    if policy == "maddpg":
+    if policy == "att-maddpg":
         model_p = partial(mlp_model_adv_p if side == "adv" else mlp_model_agent_p, n_good=N_GOOD, n_adv=N_ADV,
                           n_land=N_LAND, index=i, share_weights=share_weights)
         model_q = partial(mlp_model_adv_q if side == "adv" else mlp_model_agent_q, n_good=N_GOOD, n_adv=N_ADV,
                           n_land=N_LAND, index=i, share_weights=share_weights)
-    elif policy == "maddpg_numbered":
+    elif policy == "PC":
         model_p = partial(mlp_model_adv_p_numbered if side == "adv" else mlp_model_agent_p_numbered, n_good=N_GOOD, n_adv=N_ADV,
                           n_land=N_LAND, index=i, share_weights=share_weights)
         model_q = partial(mlp_model_adv_q_numbered if side == "adv" else mlp_model_agent_q_numbered, n_good=N_GOOD, n_adv=N_ADV,
                           n_land=N_LAND, index=i, share_weights=share_weights)
-    elif policy == "baseline":
+    elif policy == "maddpg":
         model_p = mlp_model
         model_q = mlp_model
     elif policy == "mean_field":
@@ -318,7 +318,6 @@ def parse_args(add_extra_flags=None):
     parser.add_argument("--no-wheel", action="store_true", default=False)
     parser.add_argument("--alpha", type=float, default=0.0)
     parser.add_argument("--show-attention", action="store_true", default=False)
-    # parser.add_argument("--wolf-speed", type=float, default=.5)
     parser.add_argument("--max-episode-len", type=int,
                         default=25, help="maximum episode length")
     parser.add_argument("--num-episodes", type=int,
@@ -348,16 +347,14 @@ def parse_args(add_extra_flags=None):
     parser.add_argument("--good-share-weights", action="store_true", default=False)
     parser.add_argument("--adv-share-weights", action="store_true", default=False)
     # Checkpointing
-    parser.add_argument("--exp-name", type=str, default="",
-                        help="name of the experiment")
-    parser.add_argument("--save-dir", type=str, default="./Jul_21/test3_2_2_2_4_bettershape_changefood_qian/",
+    parser.add_argument("--save-dir", type=str, default="./test/",
                         help="directory in which training state and model should be saved")
     parser.add_argument("--train-rate", type=int, default=100,
                         help="save model once every time this many episodes are completed")
     parser.add_argument("--save-rate", type=int, default=1000,
                         help="save model once every time this many episodes are completed")
     parser.add_argument("--checkpoint-rate", type=int, default=0)
-    parser.add_argument("--load-dir", type=str, default="./jun_6/test1_sumreward_03_2_2_2_4_may28debug1/",
+    parser.add_argument("--load-dir", type=str, default="./test/",
                         help="directory in which training state and model are loaded")
     # Evaluation
     parser.add_argument("--restore", action="store_true", default=False)
