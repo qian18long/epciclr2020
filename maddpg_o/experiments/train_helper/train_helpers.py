@@ -479,22 +479,6 @@ class Agent(multiprocessing.Process):
         # print(batch_obs)
         return self.trainer.target_action(batch_obs)
 
-    # def get_input(self):
-    #     return
-    #
-    # def output(self, conn=self.main_conn, msg=None):
-    #     conn.send(msg)
-    #
-    # def closure(self, func, has_input):
-    #     inpt = self.main_conn.recv()
-    #     if inpt is None and has_input:
-    #         return False
-    #     if has_input:
-    #         output = func(inpt)
-    #     else:
-    #         output = func()
-    #     self.output(output)
-    #     return True
 
     def _run(self):
         self.sum_batch_size = 0
@@ -561,9 +545,6 @@ class Agent(multiprocessing.Process):
                         if self.sum_batch_size / self.tot_batch / self.obs_batch_size < .5 and not warned:
                             warned = True
                             print("Batch load insufficient ({:.2%})! Consider higher timeout!".format(self.sum_batch_size / self.tot_batch / self.obs_batch_size))
-                        # print("update!")
-                        # target_args = self.main_conn.recv()
-                        # self.main_conn.send(self.target_action(target_args))
                         sampled_index, data_length = self.main_conn.recv()
 
                         total_numbers = sum(self.obs_len) + sum(self.act_len) + self.n + sum(self.obs_len) + self.n
@@ -611,8 +592,6 @@ class Agent(multiprocessing.Process):
                                 self.agent_sends[i].send(obs_next_n[i])
                                 target_obs.append(self.agent_recvs[i].recv())
 
-                        # if self.n == 40:
-                        #     print("#{} target action start".format(self.index))
                         target_actions = self.target_action(np.concatenate(target_obs, axis=0))
 
                         # print(target_actions.shape)
@@ -638,16 +617,9 @@ class Agent(multiprocessing.Process):
                         if self.n == 40:
                             gc.collect()
 
-                        # if self.n == 40:
-                        #     print("#{} update done".format(self.index))
+
                         self.main_conn.send(None)
                         self.main_conn.recv()
-
-    # def terminate(self):
-    #     print("Average batch size for agent-{}: {:.2f} (:.2%)".format(
-    #         self.index, self.sum_batch_size / self.tot_batch,
-    #         self.sum_batch_size / self.tot_batch / self.obs_batch_size))
-    #     multiprocessing.Process.terminate(self)
 
     def run(self):
         # self.server = tf.train.Server(CLUSTER, job_name="local%d" % self.index, task_index=0)
@@ -659,8 +631,6 @@ class Agent(multiprocessing.Process):
         else:
             with tf.device("/cpu:0"):
                 self._run()
-
-        # self.sess.close()
 
     def save_weights(self, save_dirs):
         import joblib
@@ -775,15 +745,8 @@ def train(arglist, init_weight_config=None, cached_weights=None):
     assert FLAGS.train_rate % FLAGS.n_envs == 0 and FLAGS.save_rate % FLAGS.n_envs == 0
 
     frames = []
-    # ps_hosts = FLAGS.ps_hosts.split(",")
-    # trainer_hosts = FLAGS.trainer_hosts.split(",")
-    # actor_hosts = FLAGS.actor_hosts.split(",")
 
     n = FLAGS.num_adversaries + FLAGS.num_good
-
-    # global CLUSTER
-    # # CLUSTER = tf.train.ClusterSpec({"ps": ps_hosts, "trainer": worker_hosts})
-    # CLUSTER = tf.train.ClusterSpec({"local%d" % i: ["localhost:{}".format(7000 + i)] for i in range(n)})
 
     old_n = None
     id_mapping = None
@@ -972,15 +935,6 @@ def train(arglist, init_weight_config=None, cached_weights=None):
 
         t_start = time.time()
 
-        # replay_buffer = UnionReplayBuffer(int(1e6), n_items=5, n_agents=n)
-
-        # if FLAGS.restore:
-            # replay_buffer.load(FLAGS.load_dir)
-
-            # with open(os.path.join(FLAGS.load_dir, "progress"), "r") as f:
-            #     num_episodes = int(f.read())
-
-        # episode_rewards = []
         agent_rewards = [[] for _ in range(n)]
 
         train_start_time = time.time()
@@ -1049,37 +1003,6 @@ def train(arglist, init_weight_config=None, cached_weights=None):
                     exp_len, flat_data = exp_to_bytes(tmp_file, [obs_n, action_n, reward_n, new_obs_n, done_n])
 
                     tmp_file.flush()
-                    # test_tmp_file.seek((buffer_len % BUFFER_SIZE) * exp_len)
-                    # print(flat_data)
-                    # f = bytes_to_exp(test_tmp_file, exp_len // 4)
-                    # # print(f)
-                    # assert np.isclose(flat_data, f).all()
-                    #
-                    # last = 0
-                    # for i in range(n):
-                    #     l = obs_len[i]
-                    #     f, last = flat_data[last: last + l], last + l
-                    #     assert np.isclose(f, obs_n[i]).all()
-                    #
-                    # for i in range(n):
-                    #     l = act_len[i]
-                    #     f, last = flat_data[last: last + l], last + l
-                    #     assert np.isclose(f, action_n[i]).all()
-                    #
-                    # for i in range(n):
-                    #     l = 1
-                    #     f, last = flat_data[last: last + l], last + l
-                    #     assert np.isclose(f, reward_n[i]).all()
-                    #
-                    # for i in range(n):
-                    #     l = obs_len[i]
-                    #     f, last = flat_data[last: last + l], last + l
-                    #     assert np.isclose(f, new_obs_n[i]).all()
-                    #
-                    # for i in range(n):
-                    #     l = 1
-                    #     f, last = flat_data[last: last + l], last + l
-                    #     assert np.isclose(f, done_n[i]).all()
 
                     buffer_len += 1
                     if buffer_len % BUFFER_SIZE == 0:
@@ -1102,9 +1025,6 @@ def train(arglist, init_weight_config=None, cached_weights=None):
                         if FLAGS.show_attention:
                             import joblib
                             joblib.dump((good_attn[index], adv_attn[index]), os.path.join(FLAGS.save_dir, "episode-{}.attn".format(num_episodes - 1)))
-                            # print("episode {}".format(num_episodes - 1))
-                            # print("good attn:", good_attn[index])
-                            # print("adv attn:", adv_attn[index])
 
                         if record:
                             good_attn[index] = []
@@ -1184,49 +1104,10 @@ def train(arglist, init_weight_config=None, cached_weights=None):
             tmp_file.flush()
             update_event.set()
 
-            # def sample_1(i):
-            #     buffer = replay_buffer
-            #     index = buffer.make_index(FLAGS.batch_size)
-            #     _obs_n, _action_n, _reward_n, _obs_next_n, _done_n = buffer.sample_index(index)
-            #     return _obs_n, _action_n, _reward_n[i], _obs_next_n, _done_n[i]
-
             tmp0 = time.time()
-            # sample_indices = [ for _ in range(n)]
-            # sample_data = list(multiprocessing.Pool().map(sample_2, datas))
-            # sample_data = multiprocessing.Pool().map(sample, list(range(n)))
-            # sample_data = parallel(datas)
             sample_time += time.time() - tmp0
-            # print("sample done")
-
-
-            # print(sample_data[i][3].shape)
-            # sample_data[i][3][j][?]:
-            # batch_obs = [[] for _ in range(n)]
-            # for i in range(n):
-            #     for j in range(n):
-            #         for k in range(FLAGS.batch_size):
-            #             batch_obs[i].append(sample_data[j][3][i][k])
-            #
-            # tmp0 = time.time()
-            # for i in range(n):
-            #     main_agent_conns[i][0].send(np.array(batch_obs[i]))
-            # ret = [main_agent_conns[i][0].recv() for i in range(n)]
-            #
-            # target_action_time += time.time() - tmp0
-            # target_action_n = [[[] for _ in range(n)] for _ in range(n)]
-            # for i in range(n):
-            #     for j in range(n):
-            #         for k in range(FLAGS.batch_size):
-            #             target_action_n[i][j].append(ret[j][i * FLAGS.batch_size + k])
-            # for i in range(n):
-            #     for j in range(n):
-            #         target_action_n[i][j] = np.array(target_action_n[i][j])
-            # print("next action done"
             tmp0 = time.time()
-            # update
-            # real_train_times = parallel(list(zip(sample_data, target_action_n)))
             for i in range(n):
-                # main_agent_conns[i][0].send((sample_data[i], target_action_n[i]))
                 indices = random.sample(range(min(buffer_len, BUFFER_SIZE)), FLAGS.batch_size)
                 main_agent_conns[i][0].send((indices, exp_len))
 
@@ -1284,165 +1165,3 @@ def train(arglist, init_weight_config=None, cached_weights=None):
             "time_grass": np.array(time_grass_all).T,
             "time_live":  np.array(time_live_all).T
         }
-
-        # tmp0 = time.time()
-        # action_n = parallel([np.array([obs_n[i][j] for i in range(n_envs)]) for j in range(n)])
-        # action_n = [[np.array(action_n[j][i]) for j in range(n)] for i in range(n_envs)]
-        # tmp1 = time.time()
-        # action_time += tmp1 - tmp0
-        # tmp0 = tmp1
-
-        # print("action done")
-
-        # environment step
-    #     env_data = [env[i].step(action_n[i]) for i in range(n_envs)]
-    #
-    #     new_obs_n = []
-    #     rew_n = []
-    #     done_n = []
-    #     info_n = []
-    #
-    #     for i in range(n_envs):
-    #         new_obs_n.append(env_data[i][0])
-    #         rew_n.append(np.array(env_data[i][1]))
-    #         done_n.append(np.array(env_data[i][2]))
-    #         info_n.append(env_data[i][3])
-    #
-    #     # for i in range(n):
-    #     #     rew_n[i] = np.array(rew_n[i])
-    #     #     done_n[i] = np.array(done_n[i])
-    #     tmp1 = time.time()
-    #     env_time += tmp1 - tmp0
-    #     # print("env done")
-    #
-    #
-    #     episode_step += 1
-    #     done = any(list(map(all, done_n)))
-    #
-    #     # terminal = (episode_step >= FLAGS.max_episode_len)
-    #
-    #     terminal = (episode_step >= FLAGS.max_episode_len)
-    #
-    #     if FLAGS.train_rate != 0:
-    #         tmp0 = time.time()
-    #         # for i in range(n):
-    #         for i in range(n_envs):
-    #             replay_buffer.add([obs_n[i], action_n[i], rew_n[i], new_obs_n[i], done_n[i]])
-    #         # lengths = parallel([(obs_n, action_n, rew_n[i], new_obs_n, done_n[i]) for i in range(n)])
-    #         experience_time += time.time() - tmp0
-    #         # print("exp done")
-    #
-    #     obs_n = new_obs_n
-    #
-    #     # print(agent_rewards)
-    #     for j in range(n_envs):
-    #         for i, rew in enumerate(rew_n[j]):
-    #             episode_rewards[-n_envs + j] += rew
-    #             agent_rewards[i][-n_envs + j] += rew
-    #
-    #     # for i, rew in enumerate(rew_n):
-    #     #     episode_rewards[-1] += rew
-    #     #     agent_rewards[i][-1] += rew
-    #
-    #     if done or terminal:
-    #         if FLAGS.save_gif_data:
-    #             import joblib
-    #             for i in range(n_envs):
-    #                 joblib.dump(env[i].export_memory(),
-    #                             os.path.join(FLAGS.save_dir, "episode-{}.gif-data".format(num_episodes + i)))
-    #         if FLAGS.save_summary:
-    #             for j in range(n_envs):
-    #                 summary = sess.run([summaries],
-    #                                    feed_dict=dict([(reward_phs[i], agent_rewards[i][-n_envs + j]) for i in range(n)] +
-    #                                                   [(episode_reward, episode_rewards[-n_envs + j])])
-    #                                    )[0]
-    #                 writer.add_summary(summary, num_episodes + j)
-    #         num_episodes += n_envs
-    #         obs_n = [env[i].reset() for i in range(n_envs)]
-    #         episode_step = 0
-    #         episode_rewards += [0.] * n_envs
-    #         # iitem = 0
-    #         # for item in history_info:
-    #         #     info_all[iitem] += history_info[iitem]
-    #         #     iitem += 1
-    #         for a in agent_rewards:
-    #             a += [0.] * n_envs
-    #         # agent_info.append([[]])
-    #
-    #     # increment global step counter
-    #     train_step += n_envs
-    #
-    #     # if FLAGS.save_gifs:
-    #     #     frames.append(env.render('rgb_array')[0])
-    #
-    #     if FLAGS.train_rate != 0 and len(replay_buffer) >= FLAGS.batch_size * FLAGS.max_episode_len and train_step % FLAGS.train_rate == 0:
-    #
-    #         # batch_obs: (n, (n * batch), obs)
-    #         ret = parallel(batch_obs)  # n * (n * batch) * act
-    #         target_action_n = [[[] for _ in range(n)] for _ in range(n)]
-    #         for i in range(n):
-    #             for j in range(n):
-    #                 for k in range(FLAGS.batch_size):
-    #                     target_action_n[i][j].append(ret[j][i * FLAGS.batch_size + k])
-    #         for i in range(n):
-    #             for j in range(n):
-    #                 target_action_n[i][j] = np.array(target_action_n[i][j])
-    #         target_action_time += time.time() - tmp0
-    #         # print("next action done"
-    #         tmp0 = time.time()
-    #         # update
-    #         real_train_times = parallel(list(zip(sample_data, target_action_n)))
-    #         # real_train_times = parallel(sample_data)
-    #         update_time += time.time() - tmp0
-    #         for i in range(5):
-    #             for j in range(n):
-    #                 real_train_time[i] += real_train_times[j][i]
-    #         # print("update done")
-    #     else:
-    #         send_none()
-    #
-    #     if (terminal or done) and (FLAGS.save_rate > 0 and num_episodes % FLAGS.save_rate == 0):
-    #         tmp0 = time.time()
-    #         trainable_weights = parallel([FLAGS.save_dir] * n)
-    #         CACHED_WEIGHTS = {}
-    #         for save_dict in trainable_weights:
-    #             CACHED_WEIGHTS.update(save_dict)
-    #         print("episodes: {}, total time: {}, action time: {}, env time: {}, exp time: {}, target action time: {}, sample time: {}, update time: {}, real train time: {}, save time: {}".format(
-    #             num_episodes, time.time() - t_start, action_time, env_time, experience_time, target_action_time, sample_time, update_time, real_train_time, time.time() - tmp0))
-    #         print("steps: {}, episodes: {}, mean episode reward: {}, agent episode reward: {}, time: {}".format(
-    #             train_step, len(episode_rewards), np.mean(episode_rewards[-2:]),
-    #             [np.mean(rew[-2:]) for rew in agent_rewards], round(time.time() - t_start, 3)))
-    #         action_time = 0.
-    #         env_time = 0.
-    #         experience_time = 0.
-    #         target_action_time = 0.
-    #         update_time = 0.
-    #         sample_time = 0.
-    #         real_train_time = [0.] * 5
-    #         t_start = time.time()
-    #
-    #             # imageio.mimsave(os.path.join(FLAGS.save_dir, "episode-{}.gif".format(num_episodes)),
-    #             #                 frames, duration=1 / 5)
-    #     else:
-    #         send_none()
-    #
-    #     if num_episodes > FLAGS.num_episodes:
-    #         break
-    #
-    # send_none()
-    #
-    # for i in range(n):
-    #     agents[i].terminate()
-    #     agents[i].join()
-    #
-    # # sess.close()
-    # tf.reset_default_graph()
-    #
-    # print("Training ends. (took {}s)".format(time.time() - train_start_time))
-    #
-    # # print(agent_rewards)
-    # if queue is not None:
-    #     queue.put({
-    #         "cached_weights": CACHED_WEIGHTS,
-    #         "agent_rewards": agent_rewards
-    #     })

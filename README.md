@@ -1,11 +1,9 @@
-**Status:** Archive (code is provided as-is, no updates expected)
 
-# Multi-Agent Deep Deterministic Policy Gradient (MADDPG)
+# Evolutionary Population Curriculum for Scaling Multi-Agent Reinforcement Learning
 
 This is the code for implementing the MADDPG algorithm presented in the paper:
-[Multi-Agent Actor-Critic for Mixed Cooperative-Competitive Environments](https://arxiv.org/pdf/1706.02275.pdf).
-It is configured to be run in conjunction with environments from the
-[Multi-Agent Particle Environments (MPE)](https://github.com/openai/multiagent-particle-envs).
+[Evolutionary Population Curriculum for Scaling Multi-Agent Reinforcement Learning](https://openreview.net/forum?id=SJxbHkrKDH).
+It is configured to be run in conjunction with environments from the(https://github.com/qian18long/epciclr2020/tree/master/mpe_local).
 Note: this codebase has been restructured since the original paper, and the results may
 vary from those reported in the paper.
 
@@ -17,19 +15,9 @@ vary from those reported in the paper.
 
 ## Case study: Multi-Agent Particle Environments
 
-We demonstrate here how the code can be used in conjunction with the  
-[Multi-Agent Particle Environments (MPE)](https://github.com/openai/multiagent-particle-envs).
+We demonstrate here how the code can be used in conjunction with the(https://github.com/qian18long/epciclr2020/tree/master/mpe_local).
 
-- Download and install the MPE code [here](https://github.com/openai/multiagent-particle-envs)
-by following the `README`.
 
-- Ensure that `multiagent-particle-envs` has been added to your `PYTHONPATH` (e.g. in `~/.bashrc` or `~/.bash_profile`).
-
-- To run the code, `cd` into the `experiments` directory and run `train.py`:
-
-``python train.py --scenario simple``
-
-- You can replace `simple` with any environment in the MPE you'd like to run.
 
 ## Command-line options
 
@@ -100,14 +88,3 @@ has been provided), but does not continue training (default: `False`)
 
 
 ## Paper citation
-
-If you used this code for your experiments or found it helpful, consider citing the following paper:
-
-<pre>
-@article{lowe2017multi,
-  title={Multi-Agent Actor-Critic for Mixed Cooperative-Competitive Environments},
-  author={Lowe, Ryan and Wu, Yi and Tamar, Aviv and Harb, Jean and Abbeel, Pieter and Mordatch, Igor},
-  journal={Neural Information Processing Systems (NIPS)},
-  year={2017}
-}
-</pre>
