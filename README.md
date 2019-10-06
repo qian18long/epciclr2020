@@ -28,13 +28,13 @@ We demonstrate here how the code can be used in conjunction with the(https://git
 
 - `--map-size`: The size of the environment. 1 if normal and 2 otherwise. (default: `"normal"`)
 
-- `sight`: The agent's visibility radius. (default: `100`)
+- `--sight`: The agent's visibility radius. (default: `100`)
 
-- `no-wheel`: ???
+- `--no-wheel`: ???
 
-- `alpha`: Reward shared weight. (default: `0.0`)
+- `--alpha`: Reward shared weight. (default: `0.0`)
 
-- `show-attention`: ???
+- `--show-attention`: ???
 
 - `--max-episode-len` maximum length of each episode for the environment (default: `25`)
 
@@ -68,19 +68,21 @@ We demonstrate here how the code can be used in conjunction with the(https://git
 
 - `--n_cpu_per_agent`: cpu usage per agent (default: `1`)
 
-- `good-share-weights`: good agents share weights of the agents encoder within the model.
+- `--good-share-weights`: good agents share weights of the agents encoder within the model.
 
-- `adv-share-weights`: adversarial agents share weights of the agents encoder within the model.
+- `--adv-share-weights`: adversarial agents share weights of the agents encoder within the model.
+
+- `--use-gpu`: Use GPU to for training (default: `False`)
 
 ### Checkpointing
 
 - `--save-dir`: directory where intermediate training results and model will be saved (default: `"/test/"`)
 
-- `--train-rate`: ???? (default: `100`)
+- `--train-rate`: (default: `100`)
 
 - `--save-rate`: model is saved every time this number of episodes has been completed (default: `1000`)
 
-- `--checkpoint-rate`: ???? (default: `0`)
+- `--checkpoint-rate`: (default: `0`)
 
 - `--load-dir`: directory where training state and model are loaded from (default: `"test"`)
 
@@ -89,38 +91,44 @@ We demonstrate here how the code can be used in conjunction with the(https://git
 - `--restore`: restores previous training state stored in `load-dir` (or in `save-dir` if no `load-dir`
 has been provided), and continues training (default: `False`)
 
-- `--eval`: ???? (default: `0`)
-
 - `--display`: displays to the screen the trained policy stored in `load-dir` (or in `save-dir` if no `load-dir`
 has been provided), but does not continue training (default: `False`)
 
-- `--save-gif-data`: ???? (default: `0`)
+- `--save-gif-data`: Save the gif examples to the save-dir (default: `False`)
 
-- `--render-gif`: ???? (default: `0`)
+- `--render-gif`: Render the gif in the load-dir (default: `False`)
 
 - `--benchmark`: runs benchmarking evaluations on saved policy, saves results to `benchmark-dir` folder (default: `False`)
 
 - `--benchmark-iters`: number of iterations to run benchmarking for (default: `100000`)
 
-- `--use-gpu`: ???? (default: `0`)
+- `--n-envs`: (default: `1`)
 
-- `--n-envs`: ???? (default: `0`)
+- `--save-summary`: (default: `False`)
 
-- `--save-summary`: ???? (default: `0`)
-
-- `--timeout`: ???? (default: `0`)
+- `--timeout`: (default: `0.02`)
 
 ## Code structure
 
-- `./experiments/train.py`: contains code for training MADDPG on the MPE
+- `.maddpg_o/experiments/train_helper/train_helpers.py`: contains code for training MADDPG, Att-MADDPG, mean-field, Vanilla PC and EPC on the MPE
 
-- `./maddpg/trainer/maddpg.py`: core code for the MADDPG algorithm
+- `.maddpg_o/experiments/train_normal.py`: apply the train_helpers.py for MADDPG, Att-MADDPG and mean-field training
 
-- `./maddpg/trainer/replay_buffer.py`: replay buffer code for MADDPG
+- `.maddpg_o/experiments/train_normal.py`: apply the population curriculum in train_helpers.py to add an agent in model of load_dir.
 
-- `./maddpg/common/distributions.py`: useful distributions used in `maddpg.py`
+- `.maddpg_o/experiments/train_x2.py`: apply the population curriculum in train_helpers.py to duplicate agents in model of load_dir.
 
-- `./maddpg/common/tf_util.py`: useful tensorflow functions used in `maddpg.py`
+- `.maddpg_o/experiments/train_mix_match.py`: Mix match of the good agents in '--sheep-init-load-dirs' and adversarial agents in '--wolf-init-load-dirs' for model agents evaluation.
+
+- `.maddpg_o/experiments/compete.py`: Mix match within all agent groups in '--competitor-load-dirs' to evaluate all agent groups' performances for EVOLUTIONARY SELECTION.
+
+- `./maddpg_o/maddpg_local/micro/maddpg.py`: core code for the MADDPG based algorithm
+
+- `./maddpg_o.experiments.train_helper.union_replay_buffer`: replay buffer code
+
+- `./maddpg_o/maddpg_local/common/distributions.py`: useful distributions used in `maddpg.py`
+
+- `./maddpg_o/maddpg_local/common/tf_util.py`: useful tensorflow functions used in `maddpg.py`
 
 
 

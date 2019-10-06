@@ -346,6 +346,7 @@ def parse_args(add_extra_flags=None):
     parser.add_argument("--n-cpu-per-agent", type=int, default=1)
     parser.add_argument("--good-share-weights", action="store_true", default=False)
     parser.add_argument("--adv-share-weights", action="store_true", default=False)
+    parser.add_argument("--use-gpu", action="store_true", default=False)
     # Checkpointing
     parser.add_argument("--save-dir", type=str, default="./test/",
                         help="directory in which training state and model should be saved")
@@ -358,14 +359,13 @@ def parse_args(add_extra_flags=None):
                         help="directory in which training state and model are loaded")
     # Evaluation
     parser.add_argument("--restore", action="store_true", default=False)
-    parser.add_argument("--eval", action="store_true", default=False)
     parser.add_argument("--display", action="store_true", default=False)
     parser.add_argument("--save-gif-data", action="store_true", default=False)
     parser.add_argument("--render-gif", action="store_true", default=False)
     parser.add_argument("--benchmark", action="store_true", default=False)
     parser.add_argument("--benchmark-iters", type=int, default=10000,
                         help="number of iterations run for benchmarking")
-    parser.add_argument("--use-gpu", action="store_true", default=False)
+
     parser.add_argument("--n-envs", type=int, default=1)
     parser.add_argument("--save-summary", action="store_true", default=False)
     parser.add_argument("--timeout", type=float, default=0.02)
