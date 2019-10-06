@@ -3,8 +3,8 @@
 
 This is the code for implementing the MADDPG algorithm presented in the paper:
 [Evolutionary Population Curriculum for Scaling Multi-Agent Reinforcement Learning](https://openreview.net/forum?id=SJxbHkrKDH).
-It is configured to be run in conjunction with environments from the(https://github.com/qian18long/epciclr2020/tree/master/mpe_local).
-We show our gif results here(https://sites.google.com/view/epciclr2020/)
+It is configured to be run in conjunction with environments from the (https://github.com/qian18long/epciclr2020/tree/master/mpe_local).
+We show our gif results here (https://sites.google.com/view/epciclr2020/).
 Note: this codebase has been restructured since the original paper, and the results may
 vary from those reported in the paper.
 
