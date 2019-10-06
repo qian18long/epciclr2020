@@ -4,6 +4,7 @@
 This is the code for implementing the MADDPG algorithm presented in the paper:
 [Evolutionary Population Curriculum for Scaling Multi-Agent Reinforcement Learning](https://openreview.net/forum?id=SJxbHkrKDH).
 It is configured to be run in conjunction with environments from the(https://github.com/qian18long/epciclr2020/tree/master/mpe_local).
+We show our gif results here(https://sites.google.com/view/epciclr2020/)
 Note: this codebase has been restructured since the original paper, and the results may
 vary from those reported in the paper.
 
@@ -25,16 +26,15 @@ We demonstrate here how the code can be used in conjunction with the(https://git
 
 - `--scenario`: defines which environment in the MPE is to be used (default: `"grassland"`)
 
-
 - `--map-size`: The size of the environment. 1 if normal and 2 otherwise. (default: `"normal"`)
 
 - `--sight`: The agent's visibility radius. (default: `100`)
 
-- `--no-wheel`: ???
+- `--no-wheel`: (default: `false`)
 
 - `--alpha`: Reward shared weight. (default: `0.0`)
 
-- `--show-attention`: ???
+- `--show-attention`: (default: `false`)
 
 - `--max-episode-len` maximum length of each episode for the environment (default: `25`)
 
