@@ -122,9 +122,9 @@ has been provided), but does not continue training (default: `False`)
 
 </pre>
 @inproceedings{epciclr2020,
-    author = {Qian Long and Zihan Zhou and Abhinav Gupta and Fei Fang and Yi Wu and Xiaolong Wang},
-    title = {Evolutionary Population Curriculum for Scaling Multi-Agent Reinforcement Learning},
-    booktitle = {ICLR},
-    year = {2020}
+  author = {Qian Long and Zihan Zhou and Abhinav Gupta and Fei Fang and Yi Wu and Xiaolong Wang},
+  title = {Evolutionary Population Curriculum for Scaling Multi-Agent Reinforcement Learning},
+  booktitle = {ICLR},
+  year = {2020}
 }
 </pre>
