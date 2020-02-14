@@ -30,11 +30,7 @@ We demonstrate here how the code can be used in conjunction with the(https://git
 
 - `--sight`: The agent's visibility radius. (default: `100`)
 
-- `--no-wheel`: (default: `false`)
-
 - `--alpha`: Reward shared weight. (default: `0.0`)
-
-- `--show-attention`: (default: `false`)
 
 - `--max-episode-len` maximum length of each episode for the environment (default: `25`)
 
@@ -72,17 +68,13 @@ We demonstrate here how the code can be used in conjunction with the(https://git
 
 - `--adv-share-weights`: adversarial agents share weights of the agents encoder within the model.
 
-- `--use-gpu`: Use GPU to for training (default: `False`)
+- `--use-gpu`: Use GPU for training (default: `False`)
 
 ### Checkpointing
 
 - `--save-dir`: directory where intermediate training results and model will be saved (default: `"/test/"`)
 
-- `--train-rate`: (default: `100`)
-
 - `--save-rate`: model is saved every time this number of episodes has been completed (default: `1000`)
-
-- `--checkpoint-rate`: (default: `0`)
 
 - `--load-dir`: directory where training state and model are loaded from (default: `"test"`)
 
@@ -97,16 +89,6 @@ has been provided), but does not continue training (default: `False`)
 - `--save-gif-data`: Save the gif examples to the save-dir (default: `False`)
 
 - `--render-gif`: Render the gif in the load-dir (default: `False`)
-
-- `--benchmark`: runs benchmarking evaluations on saved policy, saves results to `benchmark-dir` folder (default: `False`)
-
-- `--benchmark-iters`: number of iterations to run benchmarking for (default: `100000`)
-
-- `--n-envs`: (default: `1`)
-
-- `--save-summary`: (default: `False`)
-
-- `--timeout`: (default: `0.02`)
 
 ## Code structure
 
@@ -130,6 +112,17 @@ has been provided), but does not continue training (default: `False`)
 
 - `./maddpg_o/maddpg_local/common/tf_util.py`: useful tensorflow functions used in `maddpg.py`
 
+## Quick start
+
+- Run `run_att_grassland.sh` for att-madddpg method.
+
 
 
 ## Paper citation
+
+@inproceedings{epciclr2020,
+    author = {Qian Long and Zihan Zhou and Abhinav Gupta and Fei Fang and Yi Wu and Xiaolong Wang},
+    title = {Evolutionary Population Curriculum for Scaling Multi-Agent Reinforcement Learning},
+    booktitle = {ICLR},
+    year = {2020}
+}
