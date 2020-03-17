@@ -35,7 +35,7 @@ def renumber(read_path, write_path, r, delta):
         joblib.dump(weights, os.path.join(write_path, "agent{}.trainable-weights".format(i + delta)))
 
 
-def mix_match():
+def mix_match(FLAGS):
     save_dir = FLAGS.save_dir
     initial_dir = os.path.join(save_dir, "initial")
     touch_dir(initial_dir)
@@ -77,4 +77,4 @@ def mix_match():
 if __name__ == "__main__":
     FLAGS = parse_args(add_extra_flags)
 
-    mix_match()
+    mix_match(FLAGS)

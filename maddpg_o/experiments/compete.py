@@ -107,7 +107,7 @@ def compete(arglist):
         competitor_share_weights = new_competitor_share_weights
         competitor_num_units = new_competitor_num_units
         n_competitors = len(competitor_load_dirs)
-        
+
     if arglist.baseline_checkpoint_rates is not None:
         baseline_checkpoint_rates = expand(arglist.baseline_checkpoint_rates, n_baselines)
         baseline_start_episodes = expand(arglist.baseline_start_episodes or baseline_checkpoint_rates, n_baselines)
@@ -209,7 +209,7 @@ def compete(arglist):
     while len(kwargs_list) > 0:
         results += proxy_train(kwargs_list[:limit])
         kwargs_list = kwargs_list[limit:]
-        
+
     detailed_reports = []
 
     competitor_wolf_scores = np.zeros((n_competitors, 1 if dot_product else n_baselines))
@@ -217,7 +217,7 @@ def compete(arglist):
 
     baseline_wolf_scores = np.zeros((n_baselines, 1 if dot_product else n_competitors))
     baseline_sheep_scores = np.zeros((n_baselines, 1 if dot_product else n_competitors))
-    
+
 
     competitor_wolf_tg = np.zeros((n_competitors, 1 if dot_product else n_baselines))
     competitor_sheep_tg = np.zeros((n_competitors, 1 if dot_product else n_baselines))
@@ -409,6 +409,7 @@ def compete(arglist):
         import json
         json.dump(report, open(os.path.join(original_arglist.save_dir, "report.json"), "w"))
 
+    return report
 
 if __name__ == "__main__":
     compete(parse_args(add_extra_flags))
