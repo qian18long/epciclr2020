@@ -10,9 +10,9 @@ vary from those reported in the paper.
 
 ## Installation
 
-- To install, `cd` into the root directory and type `pip install -e .`
+<!-- - To install, `cd` into the root directory and type `pip install -e .` -->
 
-- Known dependencies: Python (3.5.4), OpenAI gym (0.10.5), tensorflow (1.8.0), numpy (1.14.5)
+- Install dependencies: Python (3.5.4), OpenAI gym (0.10.5), tensorflow (1.8.0), numpy (1.14.5)
 
 ## Case study: Multi-Agent Particle Environments
 
@@ -70,6 +70,8 @@ We demonstrate here how the code can be used in conjunction with the(https://git
 
 - `--use-gpu`: Use GPU for training (default: `False`)
 
+- `--n-envs`: number of environments instances in parallelization
+
 ### Checkpointing
 
 - `--save-dir`: directory where intermediate training results and model will be saved (default: `"/test/"`)
@@ -90,6 +92,20 @@ has been provided), but does not continue training (default: `False`)
 
 - `--render-gif`: Render the gif in the load-dir (default: `False`)
 
+### EPC options
+
+- `--initial-population`: initial population size in the first stage
+
+- `--num-selection`: size of the population selected for reproduction
+
+- `--num-stages`: number of stages
+
+- `--stage-num-episodes`: number of training episodes in each stage
+
+- `--stage-n-envs`: number of environments instances in parallelization in each stage
+
+- `--test-num-episodes`: number of episodes for the competing
+
 ## Code structure
 
 - `.maddpg_o/experiments/train_helper/train_helpers.py`: contains code for training MADDPG, Att-MADDPG, mean-field, Vanilla PC and EPC on the MPE
@@ -101,6 +117,8 @@ has been provided), but does not continue training (default: `False`)
 - `.maddpg_o/experiments/train_x2.py`: apply the population curriculum in train_helpers.py to duplicate agents in model of load_dir.
 
 - `.maddpg_o/experiments/train_mix_match.py`: Mix match of the good agents in '--sheep-init-load-dirs' and adversarial agents in '--wolf-init-load-dirs' for model agents evaluation.
+
+- `.maddpg_o/experiments/train_epc.py`: train the EPC algorithm.
 
 - `.maddpg_o/experiments/compete.py`: Mix match within all agent groups in '--competitor-load-dirs' to evaluate all agent groups' performances for EVOLUTIONARY SELECTION.
 
@@ -114,7 +132,7 @@ has been provided), but does not continue training (default: `False`)
 
 ## Quick start
 
-- Run `run_att_grassland.sh` for att-madddpg method.
+- Run `train_grassland_epc.sh` and `train_adversarial_epc.sh` for the EPC algorithm for scenario `grassland` and `adversarial` in the example setting presented in our paper.
 
 
 
