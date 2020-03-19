@@ -40,7 +40,7 @@ pandas==0.20.3
 pathos==0.2.4
 patsy==0.4.1
 pbr==1.10.0
-Pillow==4.2.1
+Pillow==6.2.0
 pluggy==0.12.0
 pox==0.2.6
 ppft==1.6.6.1
