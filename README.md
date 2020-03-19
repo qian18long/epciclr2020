@@ -21,6 +21,10 @@ vary from those reported in the paper.
 We demonstrate here how the code can be used in conjunction with the(https://github.com/qian18long/epciclr2020/tree/master/mpe_local). It is based on(https://github.com/openai/multiagent-particle-envs)
 
 
+## Quick start
+
+- Run `train_grassland_epc.sh` and `train_adversarial_epc.sh` for the EPC algorithm for scenario `grassland` and `adversarial` in the example setting presented in our paper.
+
 
 ## Command-line options
 
@@ -108,43 +112,38 @@ has been provided), but does not continue training (default: `False`)
 
 - `--test-num-episodes`: number of episodes for the competing
 
-## Code structure
-
-- `.maddpg_o/experiments/train_helper/train_helpers.py`: contains code for training MADDPG, Att-MADDPG, mean-field, Vanilla PC and EPC on the MPE
+## Example scripts
 
 - `.maddpg_o/experiments/train_normal.py`: apply the train_helpers.py for MADDPG, Att-MADDPG and mean-field training
 
-- `.maddpg_o/experiments/train_normal.py`: apply the population curriculum in train_helpers.py to add an agent in model of load_dir.
+<!-- - `.maddpg_o/experiments/train_normal.py`: apply the population curriculum in train_helpers.py to add an agent in model of load_dir. -->
 
-- `.maddpg_o/experiments/train_x2.py`: apply the population curriculum in train_helpers.py to duplicate agents in model of load_dir.
+- `.maddpg_o/experiments/train_x2.py`: apply a single step doubling training
 
-- `.maddpg_o/experiments/train_mix_match.py`: Mix match of the good agents in '--sheep-init-load-dirs' and adversarial agents in '--wolf-init-load-dirs' for model agents evaluation.
+- `.maddpg_o/experiments/train_mix_match.py`: mix match of the good agents in `--sheep-init-load-dirs` and adversarial agents in '--wolf-init-load-dirs' for model agents evaluation.
 
-- `.maddpg_o/experiments/train_epc.py`: train the EPC algorithm.
+- `.maddpg_o/experiments/train_epc.py`: train the scheduled EPC algorithm.
 
-- `.maddpg_o/experiments/compete.py`: Mix match within all agent groups in '--competitor-load-dirs' to evaluate all agent groups' performances for EVOLUTIONARY SELECTION.
+- `.maddpg_o/experiments/compete.py`: evaluate different models by competition
 
-- `./maddpg_o/maddpg_local/micro/maddpg.py`: core code for the MADDPG based algorithm
+<!-- - `./maddpg_o/maddpg_local/micro/maddpg.py`: core code for the MADDPG based algorithm -->
 
-- `./maddpg_o.experiments.train_helper.union_replay_buffer`: replay buffer code
+<!-- - `./maddpg_o.experiments.train_helper.union_replay_buffer`: replay buffer code
 
 - `./maddpg_o/maddpg_local/common/distributions.py`: useful distributions used in `maddpg.py`
 
-- `./maddpg_o/maddpg_local/common/tf_util.py`: useful tensorflow functions used in `maddpg.py`
+- `./maddpg_o/maddpg_local/common/tf_util.py`: useful tensorflow functions used in `maddpg.py` -->
 
-## Quick start
-
-- Run `train_grassland_epc.sh` and `train_adversarial_epc.sh` for the EPC algorithm for scenario `grassland` and `adversarial` in the example setting presented in our paper.
 
 
 
 ## Paper citation
 
-</pre>
+```
 @inproceedings{epciclr2020,
   author = {Qian Long and Zihan Zhou and Abhinav Gupta and Fei Fang and Yi Wu and Xiaolong Wang},
   title = {Evolutionary Population Curriculum for Scaling Multi-Agent Reinforcement Learning},
   booktitle = {ICLR},
   year = {2020}
 }
-</pre>
+```
