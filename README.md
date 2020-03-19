@@ -12,7 +12,9 @@ vary from those reported in the paper.
 
 <!-- - To install, `cd` into the root directory and type `pip install -e .` -->
 
-- Install dependencies: Python (3.5.4), OpenAI gym (0.10.5), tensorflow (1.8.0), numpy (1.14.5)
+<!-- - Install dependencies: Python (3.5.4), OpenAI gym (0.10.5), tensorflow (1.8.0), numpy (1.14.5) -->
+
+- Use `requirements.txt` to install dependencies.
 
 ## Case study: Multi-Agent Particle Environments
 
