@@ -14,7 +14,11 @@ vary from those reported in the paper.
 
 <!-- - Install dependencies: Python (3.5.4), OpenAI gym (0.10.5), tensorflow (1.8.0), numpy (1.14.5) -->
 
-- Use `requirements.txt` to install dependencies.
+<!-- - Use `requirements.txt` to install dependencies. -->
+
+```
+pip install -r requirements.txt
+```
 
 ## Case study: Multi-Agent Particle Environments
 
