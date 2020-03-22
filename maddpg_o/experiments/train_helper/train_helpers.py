@@ -125,7 +125,7 @@ def register_environment(n_good, n_adv, n_landmarks, n_food, n_forests, init_wei
     N_LAND = N_LANDMARKS + N_FOOD + N_FORESTS
     INIT_WEIGHTS = init_weights
     ID_MAPPING = id_mapping
-    print("SHARE_WEIGHTS", SHARE_WEIGHTS)
+    # print("SHARE_WEIGHTS", SHARE_WEIGHTS)
 
 
 def name_encode(name, convert):
@@ -264,7 +264,7 @@ def show_size():
         # if tot > 5000:
         #     print(tot, shape, var.name)
         s += tot
-    print("total size:", s)
+    # print("total size:", s)
 
 
 def touch_path(path):
@@ -296,7 +296,7 @@ def load_all_weights(load_dir, n):
     global CACHED_WEIGHTS
     CACHED_WEIGHTS = {}
     for i in range(n):
-        print(os.path.join(load_dir[i], "agent{}.trainable-weights".format(i)))
+        # print(os.path.join(load_dir[i], "agent{}.trainable-weights".format(i)))
         load_weights(os.path.join(load_dir[i], "agent{}.trainable-weights".format(i)))
     # print(CACHED_WEIGHTS)
     CACHED_WEIGHTS = clean(CACHED_WEIGHTS)
@@ -441,7 +441,7 @@ class Agent(multiprocessing.Process):
         # print(self.trainer())
         self.var_list = tf.get_collection(tf.GraphKeys.GLOBAL_VARIABLES)
         self.trainable_var_list = tf.get_collection(tf.GraphKeys.TRAINABLE_VARIABLES)
-        print(self.index, len(self.trainable_var_list), calc_size(self.trainable_var_list))
+        # print(self.index, len(self.trainable_var_list), calc_size(self.trainable_var_list))
         # for var in self.trainable_var_list:
         #     print(self.graph, var.graph, var.name)
 
@@ -715,9 +715,9 @@ class Environment(multiprocessing.Process):
                     if num_episodes is not None:
                         # print("Saving gif!")
                         memory = env.export_memory()
-                        print(self.index, len(memory), num_episodes)
+                        # print(self.index, len(memory), num_episodes)
                         joblib.dump(memory, os.path.join(FLAGS.save_dir, "episode-{}.gif-data".format(num_episodes)))
-                        print("gif saved.", self.index)
+                        # print("gif saved.", self.index)
                         self.main_conn.send(None)
 
                 if True:
@@ -761,7 +761,7 @@ def train(arglist, init_weight_config=None, cached_weights=None):
             if type(old_load_dir) != list:
                 old_load_dir = [old_load_dir] * old_n
             elif len(old_load_dir) == 2:
-                print("!!!")
+                # print("!!!")
                 old_load_dir = [old_load_dir[0]] * old_n_adv + [old_load_dir[1]] * old_n_good
                 # print(load_dir)
             elif len(old_load_dir) != old_n:
@@ -1148,12 +1148,12 @@ def train(arglist, init_weight_config=None, cached_weights=None):
         envs[i].terminate()
         envs[i].join()
 
-    print(len(time_grass_all), time_grass_all[0])
+    # print(len(time_grass_all), time_grass_all[0])
     print("Time grass: {}, time live: {}".format(np.mean(np.array(time_grass_all), axis=0),
                                                  np.mean(np.array(time_live_all), axis=0)))
 
-    for ar in agent_rewards:
-        print(np.mean(np.array(ar)))
+    # for ar in agent_rewards:
+    #     print(np.mean(np.array(ar)))
     print("Total training time: {}.".format(format_time(time.time() - t_start)))
 
     return {
