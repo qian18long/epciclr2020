@@ -27,7 +27,7 @@ We demonstrate here how the code can be used in conjunction with the(https://git
 
 ## Quick start
 
-- Run `train_grassland_epc.sh` and `train_adversarial_epc.sh` for the EPC algorithm for scenario `grassland` and `adversarial` in the example setting presented in our paper.
+- See `train_grassland_epc.sh`, `train_adversarial_epc.sh` and `train_food_collect_epc.sh` for the EPC algorithm for scenario `grassland`, `adversarial` and `food_collect` in the example setting presented in our paper.
 
 
 ## Command-line options
