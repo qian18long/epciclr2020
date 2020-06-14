@@ -16,9 +16,24 @@ vary from those reported in the paper.
 
 <!-- - Use `requirements.txt` to install dependencies. -->
 
+- Install tensorflow 1.13.1
+
 ```
-pip install -r requirements.txt
+pip install tensorflow==1.13.1
 ```
+
+- Install OpenAI gym
+
+```
+pip install gym==0.13.0
+```
+
+- Install other dependencies
+
+```
+pip install joblib imageio
+```
+
 
 ## Case study: Multi-Agent Particle Environments
 
